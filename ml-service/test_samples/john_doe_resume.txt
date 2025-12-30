@@ -1,0 +1,41 @@
+John Doe
+Full Stack Developer
+john.doe@email.com | (555) 123-4567
+
+PROFESSIONAL SUMMARY
+Experienced Full Stack Developer with 5+ years of expertise in building scalable web applications using modern technologies.
+
+TECHNICAL SKILLS
+• Frontend: React.js, JavaScript, TypeScript, HTML5, CSS3
+• Backend: Node.js, Express.js, Python
+• Database: MongoDB, PostgreSQL, MySQL
+• Tools: Git, Docker, AWS, REST APIs
+• Other: Agile/Scrum, TDD, CI/CD
+
+EXPERIENCE
+
+Senior Full Stack Developer | Tech Solutions Inc. | 2021 - Present
+• Developed enterprise web applications using React and Node.js stack
+• Designed and implemented RESTful APIs with Express.js and MongoDB
+• Built responsive frontends with React and modern JavaScript (ES6+)
+• Collaborated with cross-functional teams in Agile environment
+• Implemented automated testing and CI/CD pipelines
+
+Full Stack Developer | Web Innovations LLC | 2019 - 2021
+• Created dynamic web applications using React, Node.js, and MongoDB  
+• Integrated third-party APIs and payment gateways
+• Optimized application performance and database queries
+• Participated in code reviews and mentored junior developers
+
+EDUCATION
+Bachelor of Science in Computer Science
+State University | 2015 - 2019
+
+PROJECTS
+• E-Commerce Platform: Built full-stack application with React, Node.js, Express, and MongoDB
+• Task Management App: Developed MERN stack application with real-time updates
+• Weather API Dashboard: Created React app consuming REST APIs
+
+CERTIFICATIONS
+• AWS Certified Developer - Associate
+• MongoDB Certified Developer
