@@ -1,11 +1,14 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
+const connectDB = require('./src/config/db');
 
 // Load environment variables
 dotenv.config();
+
+// Connect to Database
+connectDB();
 
 // Import routes
 const authRoutes = require('./src/routes/auth');
@@ -25,14 +28,6 @@ app.use(express.urlencoded({ extended: true }));
 
 // Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
-// MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('✅ MongoDB Connected Successfully'))
-  .catch((err) => {
-    console.error('❌ MongoDB Connection Error:', err.message);
-    process.exit(1);
-  });
 
 // Routes
 app.use('/api/auth', authRoutes);

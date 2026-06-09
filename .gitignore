@@ -1,36 +1,73 @@
-# Node
+# Dependency Directories
 node_modules/
-npm-debug.log
-yarn-error.log
+jspm_packages/
+web_modules/
 
-# Python
+# Python Cache & Environments
 __pycache__/
 *.py[cod]
 *$py.class
 venv/
 env/
-.env
-.venv
+.venv/
+.Python
+ENV/
+env.bak/
+venv.bak/
 
-# Environment
+# Environment Configurations (Credentials & Keys)
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 *.env
+.env*.local
 
-# OS
+# Production Build Directories (React/Vite/Next.js)
+build/
+dist/
+out/
+.next/
+bin/
+obj/
+
+# Logs and Diagnostics
+*.log
+*.log*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Testing & Coverage
+coverage/
+.nyc_output/
+.jest/
+.eslintcache
+
+# Operating System Files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
 
-# Editor
+# Editor / IDE Files
 .vscode/
+!.vscode/extensions.json
 .idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
 
-# Backend uploads
+# App-Specific Paths
 backend/uploads/*
 !backend/uploads/.gitkeep
-
-# ML Service temp
-ml-service/temp_uploads/
+ml-service/temp_uploads/*
+!ml-service/temp_uploads/.gitkeep

@@ -1,10 +1,83 @@
-temp_uploads/
+# Byte-compiled / optimized / DLL files
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+bin/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so may be safe to ignore
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit testing / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Environments
+.env
+.venv
 env/
 venv/
-*.log
+ENV/
+env.bak/
+venv.bak/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath Parsed Files
+*.sage.py
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# VS Code & OS
+.vscode/
 .DS_Store
+
+# Service Specifics
+temp_uploads/*
+!temp_uploads/.gitkeep

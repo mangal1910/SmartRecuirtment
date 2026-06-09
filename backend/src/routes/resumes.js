@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const cloudinary = require('../config/cloudinary');
 const Resume = require('../models/Resume');
 const Job = require('../models/Job');
 const { protect, isAdmin, isApplicant } = require('../middleware/auth');
@@ -97,6 +98,18 @@ router.post('/upload', protect, upload.single('resume'), async (req, res) => {
         // Send to ML service for analysis
         const mlResult = await analyzeResume(req.file.path, jobDescription);
 
+        // Upload to Cloudinary
+        let cloudinaryResult;
+        try {
+            cloudinaryResult = await cloudinary.uploader.upload(req.file.path, {
+                folder: 'resumes',
+                resource_type: 'auto'
+            });
+        } catch (uploadError) {
+            console.error('Cloudinary upload error:', uploadError);
+            throw new Error('Failed to upload resume to cloud storage: ' + uploadError.message);
+        }
+
         // Create resume record
         const resume = await Resume.create({
             applicantId: req.user._id,
@@ -104,10 +117,15 @@ router.post('/upload', protect, upload.single('resume'), async (req, res) => {
             applicantName: req.user.name,
             applicantEmail: req.user.email,
             fileName: req.file.originalname,
-            filePath: req.file.path,
+            filePath: cloudinaryResult.secure_url,
             extractedText: mlResult.data.extracted_text || '',
             matchScore: mlResult.data.match_score || 0
         });
+
+        // Delete local temporary file
+        if (fs.existsSync(req.file.path)) {
+            fs.unlinkSync(req.file.path);
+        }
 
         res.status(201).json({
             success: true,
