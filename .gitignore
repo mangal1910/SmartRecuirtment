@@ -71,3 +71,5 @@ backend/uploads/*
 !backend/uploads/.gitkeep
 ml-service/temp_uploads/*
 !ml-service/temp_uploads/.gitkeep
+
+frontend/node_modules*

@@ -1,0 +1,268 @@
+/* Job Resumes Pipeline */
+.job-resumes-container {
+    min-height: 100vh;
+    background: #f3f4f6;
+    padding: 20px;
+}
+
+.resumes-header {
+    max-width: 1600px;
+    margin: 0 auto 32px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.job-info h1 {
+    color: #1f2937;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.job-info p {
+    color: #6b7280;
+    font-size: 16px;
+}
+
+/* Bulk Actions */
+.bulk-actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.bulk-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #4b5563;
+}
+
+.threshold-input {
+    width: 70px;
+    padding: 6px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* Pipeline Layout */
+.pipeline-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.pipeline-column {
+    background: #e5e7eb;
+    border-radius: 12px;
+    padding: 16px;
+    min-height: 600px;
+}
+
+.column-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 12px;
+    background: white;
+    border-radius: 8px;
+}
+
+.column-header h3 {
+    color: #1f2937;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: capitalize;
+}
+
+.count {
+    background: #667eea;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.resume-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 500px;
+    transition: background-color 0.2s;
+}
+
+.resume-list.dragging-over {
+    background: #d1d5db;
+    border-radius: 8px;
+}
+
+/* Resume Card */
+.resume-card {
+    background: white;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: grab;
+    transition: all 0.2s;
+}
+
+.resume-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.resume-card.dragging {
+    opacity: 0.5;
+    cursor: grabbing;
+    transform: rotate(3deg);
+}
+
+.resume-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.resume-card-header h4 {
+    color: #1f2937;
+    font-size: 16px;
+    font-weight: 600;
+    flex: 1;
+    margin-right: 8px;
+}
+
+.match-score {
+    padding: 6px 12px;
+    border-radius: 20px;
+    color: white;
+    font-weight: 700;
+    font-size: 14px;
+    min-width: 50px;
+    text-align: center;
+}
+
+.applicant-email {
+    color: #6b7280;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.file-name {
+    color: #4b5563;
+    font-size: 13px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.score-bar {
+    height: 6px;
+    background: #e5e7eb;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.score-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.5s ease;
+}
+
+.upload-date {
+    color: #9ca3af;
+    font-size: 12px;
+    text-align: right;
+    margin-bottom: 12px;
+}
+
+/* Card Actions */
+.card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    border-top: 1px solid #f3f4f6;
+    padding-top: 12px;
+}
+
+.btn-action {
+    flex: 1;
+    padding: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-interview {
+    background-color: #fef3c7;
+    color: #d97706;
+}
+
+.btn-interview:hover {
+    background-color: #fde68a;
+}
+
+.btn-hire {
+    background-color: #d1fae5;
+    color: #059669;
+}
+
+.btn-hire:hover {
+    background-color: #a7f3d0;
+}
+
+.btn-reject {
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+
+.btn-reject:hover {
+    background-color: #fecaca;
+}
+
+.empty-column {
+    color: #9ca3af;
+    text-align: center;
+    padding: 40px 20px;
+    font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .pipeline-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .pipeline-container {
+        grid-template-columns: 1fr;
+    }
+
+    .resumes-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .bulk-actions {
+        margin-left: 0;
+        width: 100%;
+        justify-content: space-between;
+    }
+}
