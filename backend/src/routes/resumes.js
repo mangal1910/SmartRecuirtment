@@ -304,6 +304,26 @@ router.put('/:id/status', protect, isAdmin, async (req, res) => {
             });
         }
 
+        // Lock hired and rejected applications from being edited
+        if (resume.status === 'hired' || resume.status === 'rejected') {
+            return res.status(400).json({
+                success: false,
+                message: 'Hired or Rejected applications are locked and cannot be modified.'
+            });
+        }
+
+        // Update vacancy openings count if status transitions to hired
+        if (status === 'hired') {
+            const job = await Job.findById(resume.jobId);
+            if (job) {
+                job.openings = Math.max(0, job.openings - 1);
+                if (job.openings === 0) {
+                    job.status = 'closed';
+                }
+                await job.save();
+            }
+        }
+
         resume.status = status;
         await resume.save();
 
@@ -373,6 +393,26 @@ router.put('/:id', protect, isAdmin, async (req, res) => {
                 success: false,
                 message: 'Resume application not found'
             });
+        }
+
+        // Lock hired and rejected applications from being edited
+        if (resume.status === 'hired' || resume.status === 'rejected') {
+            return res.status(400).json({
+                success: false,
+                message: 'Hired or Rejected applications are locked and cannot be modified.'
+            });
+        }
+
+        // Update vacancy openings count if status transitions to hired
+        if (status === 'hired' && resume.status !== 'hired') {
+            const job = await Job.findById(resume.jobId);
+            if (job) {
+                job.openings = Math.max(0, job.openings - 1);
+                if (job.openings === 0) {
+                    job.status = 'closed';
+                }
+                await job.save();
+            }
         }
 
         if (applicantName) resume.applicantName = applicantName;

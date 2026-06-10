@@ -217,6 +217,7 @@ const JobResumes = () => {
                                                     key={resume._id}
                                                     draggableId={resume._id}
                                                     index={index}
+                                                    isDragDisabled={status === 'hired' || status === 'rejected'}
                                                 >
                                                     {(provided, snapshot) => (
                                                         <div
@@ -250,13 +251,15 @@ const JobResumes = () => {
                                                             </p>
 
                                                             <div className="card-admin-actions" style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px', gap: '8px', borderTop: '1px dashed #e5e7eb', paddingTop: '8px' }}>
-                                                                <button
-                                                                    onClick={() => handleEditClick(resume)}
-                                                                    className="btn-action-small"
-                                                                    style={{ background: '#e0e7ff', color: '#4f46e5', padding: '4px 8px', fontSize: '11px', borderRadius: '4px', border: 'none', cursor: 'pointer', flex: 1 }}
-                                                                >
-                                                                    ✏️ Edit
-                                                                </button>
+                                                                {status !== 'hired' && status !== 'rejected' && (
+                                                                    <button
+                                                                        onClick={() => handleEditClick(resume)}
+                                                                        className="btn-action-small"
+                                                                        style={{ background: '#e0e7ff', color: '#4f46e5', padding: '4px 8px', fontSize: '11px', borderRadius: '4px', border: 'none', cursor: 'pointer', flex: 1 }}
+                                                                    >
+                                                                        ✏️ Edit
+                                                                    </button>
+                                                                )}
                                                                 <button
                                                                     onClick={() => handleDeleteResume(resume._id)}
                                                                     className="btn-action-small"
