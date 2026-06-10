@@ -28,6 +28,30 @@ router.get('/', async (req, res) => {
     }
 });
 
+// @route   GET /api/jobs/admin
+// @desc    Get all jobs (including closed) for admin dashboard
+// @access  Admin only
+router.get('/admin', protect, isAdmin, async (req, res) => {
+    try {
+        const jobs = await Job.find()
+            .populate('postedBy', 'name email')
+            .sort({ createdAt: -1 });
+
+        res.json({
+            success: true,
+            count: jobs.length,
+            data: jobs
+        });
+    } catch (error) {
+        console.error('Get admin jobs error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching jobs for admin',
+            error: error.message
+        });
+    }
+});
+
 // @route   GET /api/jobs/:id
 // @desc    Get single job by ID
 // @access  Public
@@ -61,7 +85,7 @@ router.get('/:id', async (req, res) => {
 // @access  Admin only
 router.post('/', protect, isAdmin, async (req, res) => {
     try {
-        const { title, description, requirements, location, jobType } = req.body;
+        const { title, description, requirements, location, jobType, openings } = req.body;
 
         // Validate input
         if (!title || !description || !requirements) {
@@ -77,6 +101,7 @@ router.post('/', protect, isAdmin, async (req, res) => {
             requirements,
             location,
             jobType,
+            openings: openings ? Number(openings) : undefined,
             postedBy: req.user._id
         });
 
@@ -100,7 +125,7 @@ router.post('/', protect, isAdmin, async (req, res) => {
 // @access  Admin only
 router.put('/:id', protect, isAdmin, async (req, res) => {
     try {
-        const { title, description, requirements, status, location, jobType } = req.body;
+        const { title, description, requirements, status, location, jobType, openings } = req.body;
 
         const job = await Job.findById(req.params.id);
 
@@ -118,6 +143,7 @@ router.put('/:id', protect, isAdmin, async (req, res) => {
         if (status) job.status = status;
         if (location) job.location = location;
         if (jobType) job.jobType = jobType;
+        if (openings !== undefined) job.openings = Number(openings);
 
         await job.save();
 

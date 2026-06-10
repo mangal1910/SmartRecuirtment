@@ -77,6 +77,30 @@ router.post('/upload', protect, upload.single('resume'), async (req, res) => {
             });
         }
 
+        // Check if job is closed
+        if (job.status === 'closed') {
+            fs.unlinkSync(req.file.path);
+            return res.status(400).json({
+                success: false,
+                message: 'This job application is already closed.'
+            });
+        }
+
+        // Check vacancy limit
+        const applicationCount = await Resume.countDocuments({ jobId: job._id });
+        if (applicationCount >= job.openings) {
+            // Automatically close the job if it wasn't already
+            if (job.status !== 'closed') {
+                job.status = 'closed';
+                await job.save();
+            }
+            fs.unlinkSync(req.file.path);
+            return res.status(400).json({
+                success: false,
+                message: 'Job applications are closed as the vacancy limit has been reached.'
+            });
+        }
+
         // Check if user already applied to this job
         const existingResume = await Resume.findOne({
             applicantId: req.user._id,
@@ -121,6 +145,12 @@ router.post('/upload', protect, upload.single('resume'), async (req, res) => {
             extractedText: mlResult.data.extracted_text || '',
             matchScore: mlResult.data.match_score || 0
         });
+
+        // Close job applications if vacancy limit is reached
+        if (applicationCount + 1 >= job.openings) {
+            job.status = 'closed';
+            await job.save();
+        }
 
         // Delete local temporary file
         if (fs.existsSync(req.file.path)) {
@@ -325,6 +355,73 @@ router.get('/:id', protect, async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Error fetching resume',
+            error: error.message
+        });
+    }
+});
+
+// @route   PUT /api/resumes/:id
+// @desc    Update candidate application details (Admin)
+// @access  Admin only
+router.put('/:id', protect, isAdmin, async (req, res) => {
+    try {
+        const { applicantName, applicantEmail, matchScore, status } = req.body;
+        const resume = await Resume.findById(req.params.id);
+
+        if (!resume) {
+            return res.status(404).json({
+                success: false,
+                message: 'Resume application not found'
+            });
+        }
+
+        if (applicantName) resume.applicantName = applicantName;
+        if (applicantEmail) resume.applicantEmail = applicantEmail;
+        if (matchScore !== undefined) resume.matchScore = Number(matchScore);
+        if (status) resume.status = status;
+
+        await resume.save();
+
+        res.json({
+            success: true,
+            message: 'Application updated successfully',
+            data: resume
+        });
+    } catch (error) {
+        console.error('Update resume error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error updating application details',
+            error: error.message
+        });
+    }
+});
+
+// @route   DELETE /api/resumes/:id
+// @desc    Remove candidate application (Admin)
+// @access  Admin only
+router.delete('/:id', protect, isAdmin, async (req, res) => {
+    try {
+        const resume = await Resume.findById(req.params.id);
+
+        if (!resume) {
+            return res.status(404).json({
+                success: false,
+                message: 'Resume application not found'
+            });
+        }
+
+        await resume.deleteOne();
+
+        res.json({
+            success: true,
+            message: 'Application deleted successfully'
+        });
+    } catch (error) {
+        console.error('Delete resume error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error deleting application',
             error: error.message
         });
     }

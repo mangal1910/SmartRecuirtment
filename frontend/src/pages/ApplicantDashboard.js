@@ -12,10 +12,6 @@ const ApplicantDashboard = () => {
     const [myApplications, setMyApplications] = useState([]);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState('jobs');
-    const [selectedJob, setSelectedJob] = useState(null);
-    const [resumeFile, setResumeFile] = useState(null);
-    const [uploading, setUploading] = useState(false);
-
     useEffect(() => {
         fetchData();
     }, []);
@@ -32,55 +28,6 @@ const ApplicantDashboard = () => {
             toast.error('Failed to fetch data');
         } finally {
             setLoading(false);
-        }
-    };
-
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const validTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-            if (!validTypes.includes(file.type)) {
-                toast.error('Please upload PDF or DOCX file');
-                return;
-            }
-            setResumeFile(file);
-        }
-    };
-
-    const handleApply = (job) => {
-        // Check if already applied
-        const alreadyApplied = myApplications.some(app => app.jobId._id === job._id);
-        if (alreadyApplied) {
-            toast.info('You have already applied to this job');
-            return;
-        }
-        setSelectedJob(job);
-    };
-
-    const handleSubmitApplication = async (e) => {
-        e.preventDefault();
-
-        if (!resumeFile) {
-            toast.error('Please select a resume file');
-            return;
-        }
-
-        setUploading(true);
-
-        try {
-            const formData = new FormData();
-            formData.append('resume', resumeFile);
-            formData.append('jobId', selectedJob._id);
-
-            await resumesAPI.uploadResume(formData);
-            toast.success('Application submitted successfully!');
-            setSelectedJob(null);
-            setResumeFile(null);
-            fetchData();
-        } catch (error) {
-            toast.error(error.response?.data?.message || 'Failed to submit application');
-        } finally {
-            setUploading(false);
         }
     };
 
@@ -137,27 +84,39 @@ const ApplicantDashboard = () => {
                             jobs.map(job => {
                                 const alreadyApplied = myApplications.some(app => app.jobId._id === job._id);
                                 return (
-                                    <div key={job._id} className="job-card">
+                                    <div
+                                        key={job._id}
+                                        className="job-card"
+                                        onClick={() => navigate(`/applicant/jobs/${job._id}`)}
+                                        style={{ cursor: 'pointer' }}
+                                    >
                                         <div className="job-card-header">
                                             <h3>{job.title}</h3>
                                             <span className={`badge badge-${job.status}`}>{job.status}</span>
                                         </div>
-                                        <p className="job-description">{job.description}</p>
-                                        <div className="job-requirements">
-                                            <strong>Requirements:</strong>
-                                            <p>{job.requirements.substring(0, 100)}...</p>
-                                        </div>
+
                                         <div className="job-meta">
                                             <span>📍 {job.location}</span>
                                             <span>💼 {job.jobType}</span>
+                                            <span>👥 Vacancies: {job.openings || 5}</span>
                                         </div>
-                                        <button
-                                            onClick={() => handleApply(job)}
-                                            className={`btn ${alreadyApplied ? 'btn-disabled' : 'btn-primary'}`}
-                                            disabled={alreadyApplied}
-                                        >
-                                            {alreadyApplied ? 'Already Applied' : 'Apply Now'}
-                                        </button>
+
+                                        <p className="job-description">
+                                            {job.description.substring(0, 120)}...
+                                        </p>
+
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '16px', borderTop: '1px solid #f3f4f6', paddingTop: '16px' }}>
+                                            <button
+                                                className={`btn ${alreadyApplied ? 'btn-disabled' : 'btn-primary'}`}
+                                                style={{ margin: 0 }}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    navigate(`/applicant/jobs/${job._id}`);
+                                                }}
+                                            >
+                                                {alreadyApplied ? 'Already Applied' : 'View & Apply'}
+                                            </button>
+                                        </div>
                                     </div>
                                 );
                             })
@@ -211,45 +170,6 @@ const ApplicantDashboard = () => {
                     </div>
                 )}
             </div>
-
-            {/* Application Modal */}
-            {selectedJob && (
-                <div className="modal-overlay" onClick={() => setSelectedJob(null)}>
-                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                        <h2>Apply to {selectedJob.title}</h2>
-                        <form onSubmit={handleSubmitApplication}>
-                            <div className="form-group">
-                                <label>Upload Resume (PDF or DOCX)</label>
-                                <input
-                                    type="file"
-                                    accept=".pdf,.docx,.doc"
-                                    onChange={handleFileChange}
-                                    required
-                                />
-                                {resumeFile && (
-                                    <p className="file-selected">Selected: {resumeFile.name}</p>
-                                )}
-                            </div>
-                            <div className="modal-actions">
-                                <button
-                                    type="button"
-                                    onClick={() => setSelectedJob(null)}
-                                    className="btn btn-secondary"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="btn btn-primary"
-                                    disabled={uploading}
-                                >
-                                    {uploading ? 'Submitting...' : 'Submit Application'}
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };

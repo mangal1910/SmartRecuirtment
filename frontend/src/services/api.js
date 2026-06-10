@@ -33,6 +33,7 @@ export const authAPI = {
 // Jobs API
 export const jobsAPI = {
     getAllJobs: () => api.get('/jobs'),
+    getAdminJobs: () => api.get('/jobs/admin'),
     getJob: (id) => api.get(`/jobs/${id}`),
     createJob: (jobData) => api.post('/jobs', jobData),
     updateJob: (id, jobData) => api.put(`/jobs/${id}`, jobData),
@@ -51,6 +52,8 @@ export const resumesAPI = {
     getJobResumes: (jobId) => api.get(`/resumes/job/${jobId}`),
     getMyResumes: () => api.get('/resumes/my'),
     updateResumeStatus: (id, status) => api.put(`/resumes/${id}/status`, { status }),
+    updateResume: (id, resumeData) => api.put(`/resumes/${id}`, resumeData),
+    deleteResume: (id) => api.delete(`/resumes/${id}`),
     rejectByThreshold: (jobId, threshold) => api.post(`/resumes/job/${jobId}/reject-threshold`, { threshold }),
     getResume: (id) => api.get(`/resumes/${id}`)
 };

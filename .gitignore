@@ -75,3 +75,5 @@ ml-service/temp_uploads/*
 !ml-service/temp_uploads/.gitkeep
 
 frontend/node_modules*
+
+DEPLOYMENT.md

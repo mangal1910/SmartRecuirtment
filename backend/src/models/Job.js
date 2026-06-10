@@ -33,6 +33,10 @@ const jobSchema = new mongoose.Schema({
         enum: ['full-time', 'part-time', 'contract', 'internship'],
         default: 'full-time'
     },
+    openings: {
+        type: Number,
+        default: 5
+    },
     createdAt: {
         type: Date,
         default: Date.now

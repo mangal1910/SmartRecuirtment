@@ -9,6 +9,7 @@ import Register from './pages/Register';
 import AdminDashboard from './pages/AdminDashboard';
 import ApplicantDashboard from './pages/ApplicantDashboard';
 import JobResumes from './pages/JobResumes';
+import JobDetails from './pages/JobDetails';
 import PrivateRoute from './components/PrivateRoute';
 
 function App() {
@@ -45,6 +46,14 @@ function App() {
               element={
                 <PrivateRoute requiredRole="applicant">
                   <ApplicantDashboard />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/applicant/jobs/:jobId"
+              element={
+                <PrivateRoute requiredRole="applicant">
+                  <JobDetails />
                 </PrivateRoute>
               }
             />

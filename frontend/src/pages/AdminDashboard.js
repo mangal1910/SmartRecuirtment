@@ -16,7 +16,8 @@ const AdminDashboard = () => {
         description: '',
         requirements: '',
         location: 'Remote',
-        jobType: 'full-time'
+        jobType: 'full-time',
+        openings: 5
     });
 
     useEffect(() => {
@@ -25,7 +26,7 @@ const AdminDashboard = () => {
 
     const fetchJobs = async () => {
         try {
-            const response = await jobsAPI.getAllJobs();
+            const response = await jobsAPI.getAdminJobs();
             setJobs(response.data.data);
         } catch (error) {
             toast.error('Failed to fetch jobs');
@@ -53,7 +54,8 @@ const AdminDashboard = () => {
                 description: '',
                 requirements: '',
                 location: 'Remote',
-                jobType: 'full-time'
+                jobType: 'full-time',
+                openings: 5
             });
             fetchJobs();
         } catch (error) {
@@ -158,6 +160,19 @@ const AdminDashboard = () => {
                                 </div>
                             </div>
 
+                            <div className="form-group">
+                                <label>Number of Openings (Vacancy Limit)</label>
+                                <input
+                                    type="number"
+                                    name="openings"
+                                    value={formData.openings}
+                                    onChange={handleChange}
+                                    min="1"
+                                    required
+                                    placeholder="e.g., 5"
+                                />
+                            </div>
+
                             <button type="submit" className="btn btn-primary">Create Job</button>
                         </form>
                     </div>
@@ -177,6 +192,7 @@ const AdminDashboard = () => {
                                 <div className="job-meta">
                                     <span>📍 {job.location}</span>
                                     <span>💼 {job.jobType}</span>
+                                    <span>👥 Openings: {job.openings || 5}</span>
                                 </div>
                                 <button
                                     onClick={() => handleViewResumes(job._id)}
